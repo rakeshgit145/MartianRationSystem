@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Model.PacketDetail>
+@{
+    ViewBag.Title = "Ration Dashboard";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ration Dashboard</title>
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+    @* These CSS and JS File For SweetAlert Box *@
+    <link href="~/SweetAlert/CSS/sweetalert.css" rel="stylesheet" />
+    <script src="~/SweetAlert/JS/sweetalert.js"></script>
+    <link href="~/SweetAlert/CSS/sweetalert.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css.map" />
+    <script src="~/SweetAlert/JS/sweetalert.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#RationGridTable').DataTable();
+        });
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <a class="popup btn btn-primary" href="/Ration/AddRation/0" style="margin-bottom:20px; margin-top:20px;">Add New Packet</a>
+
+        <a class="popup btn btn-primary" href="/Ration/Schduled/" style="margin-bottom:20px; margin-top:20px;">Ration Schdule</a>
+
+        <br />
+        <div style="width:90%; margin:0 auto;">
+
+
+            <table class="table table-bordered" id="RationGridTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>PacketId</th>
+                        <th>PacketType</th>
+                        <th>PacketContent</th>
+                        <th>Calories</th>
+                        <th>ExpiryDate</th>
+                        <th>QuantityinLitres</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PacketType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PacketContent)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Calories)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExpiryDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LitersQty)
+                            </td>
+                            <td>
+                                @*<button class="btn btn-success" id="EditBtn" onclick="EditRation(@item.Id)">Edit</button>*@
+                                @{
+                                    var RationID = item.Id;
+                                    <a class="btn btn-success" href="/Ration/EditRation/?PacketId=@RationID">Edit</a>
+
+                                }
+                                <button class="btn btn-danger" id="DeleteBtn" onclick="DeleteRation(@item.Id)">Delete</button>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="~/Scripts/Dashboard.js"></script>

@@ -1,0 +1,199 @@
+﻿@model Model.PacketDetail
+
+@{
+    ViewBag.Title = "EditRation";
+}
+<link href="~/Content/Site.css" rel="stylesheet" />
+<h2>EditRation</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            <label class="">PacketType</label>
+            @Html.HiddenFor(a => a.PacketTypeId)
+            Food:<input type="radio" id="FoodContents" name="PacketContentType" value="1" />
+            Water: <input type="radio" id="WaterContents" name="PacketContentType" value="2" />
+
+        </div>
+        <div id="FoodItem">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PacketContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PacketContent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PacketContent, "", new { @class = "text-danger" })
+                    <span id="ErrorPacketContentMsg" style="color:red"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Calories, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Calories, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Calories, "", new { @class = "text-danger" })
+                    <span id="ErrorCaloriesMsg" style="color:red"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ExpiryDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ExpiryDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.ExpiryDate, "", new { @class = "text-danger" })
+                    <span id="ErrorMsg" style="color:red"></span>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="WaterItem">
+            <div class="form-group">
+                @Html.LabelFor(model => model.LitersQty, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.LitersQty, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LitersQty, "", new { @class = "text-danger" })
+                    <span id="ErrorLitersQtyMsg" style="color:red"></span>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" id="UpdateRation" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Dashboard")
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ExpiryDate").addClass("calender");
+            $("form").attr('autocomplete', 'off');
+            $("#PacketTypeId").val();
+            $('#ExpiryDate').datepicker({
+                dateFormat: "dd/M/yy",
+                changeMonth: true,
+                changeYear: true,
+                minDate: 0
+
+            });
+
+            var PacketTypeID = $("#PacketTypeId").val();
+            if (PacketTypeID == 1) {
+                $("#FoodContents").prop('checked', true);
+                $("#FoodItem").show();
+                $("#WaterItem").hide();
+            }
+            else if (PacketTypeID == 2) {
+                $("#WaterContents").prop('checked', true);
+                $("#FoodItem").hide();
+                $("#WaterItem").show();
+            }
+
+
+            $('input[type="radio"]').click(function () {
+                if ($(this).is(':checked')) {
+
+                    if ($(this).val() == 1) {
+                        $("#PacketTypeId").val(1);
+                        $("#FoodItem").show();
+                        $("#WaterItem").hide();
+                        $("#ErrorPacketContentMsg").text("");
+                        $("#ErrorCaloriesMsg").text("");
+                        $("#ErrorCaloriesMsg").text("");
+                        $("#ErrorLitersQtyMsg").text("");
+                        $("#ErrorMsg").text("");
+                        $("#LitersQty").val("");
+                    } else if ($(this).val() == 2) {
+                        $("#PacketTypeId").val(2);
+                        $("#FoodItem").hide();
+                        $("#WaterItem").show();
+                        $("#ErrorPacketContentMsg").text("");
+                        $("#ErrorCaloriesMsg").text("");
+                        $("#ErrorCaloriesMsg").text("");
+                        $("#ErrorLitersQtyMsg").text("");
+                        $("#Calories").val("");
+                        $("#PacketContent").val("");
+                    } else {
+                        $("#WaterItem").show();
+                        $("#FoodItem").show();
+
+                    }
+                }
+            });
+
+            $("#UpdateRation").click(function () {
+                var Counter = 0;
+
+                var PacketContentVal = $("#PacketContent").val();
+                var ExpiryDate = $("#ExpiryDate").val();
+                var Calories = $("#Calories").val();
+                var QtyLtrs = $("#LitersQty").val();
+
+                if ($("#FoodContents").prop("checked")) {
+                    if (PacketContentVal == "") {
+                        $("#ErrorPacketContentMsg").text("Please fill this field ");
+                        Counter = Counter + 1;
+                    }
+
+                    if (Calories == "") {
+                        $("#ErrorCaloriesMsg").text("Please fill this field ");
+                        Counter = Counter + 1;
+
+                    }
+
+                    if (ExpiryDate == "") {
+                        $("#ErrorMsg").text("Please fill this field");
+                        Counter = Counter + 1;
+                    }
+                }
+
+
+                if ($("#WaterContents").prop("checked")) {
+                    if (QtyLtrs == "") {
+                        $("#ErrorLitersQtyMsg").text("Please fill this field ");
+                        Counter = Counter + 1;
+                    }
+                }
+
+                if (Counter > 0) {
+                    return false;
+                }
+            });
+
+            $('#Calories').keyup(function () {
+                $("#ErrorCaloriesMsg").text("");
+            });
+            $('#LitersQty').keyup(function () {
+                $("#ErrorLitersQtyMsg").text("");
+            });
+
+            $('#PacketContent').keyup(function () {
+                $("#ErrorPacketContentMsg").text("");
+            });
+            
+
+            $("#LitersQty,#Calories,#ExpiryDate").keypress(function (e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+
+        });
+
+    </script>
+}
