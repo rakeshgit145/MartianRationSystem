@@ -17,7 +17,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css.map" />
     <script src="~/SweetAlert/JS/sweetalert.min.js"></script>
     <script>
-
+         sessionStorage.setItem("startdate", "");
         $(document).ready(function () {
             $('#RationGridTable').DataTable();
         });
@@ -28,7 +28,7 @@
     <div class="container">
         <a class="popup btn btn-primary" href="/Ration/AddRation/0" style="margin-bottom:20px; margin-top:20px;">Add New Packet</a>
 
-        <a class="popup btn btn-primary" href="/Ration/Schduled/" style="margin-bottom:20px; margin-top:20px;">Ration Schdule</a>
+        <a class="popup btn btn-primary" href="/Ration/Schduled/" style="margin-bottom:20px; margin-top:20px;">Ration Schedule</a>
 
         <br />
         <div style="width:90%; margin:0 auto;">
@@ -37,12 +37,15 @@
             <table class="table table-bordered" id="RationGridTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>PacketId</th>
-                        <th>PacketType</th>
-                        <th>PacketContent</th>
+                        <th>Packet Id</th>
+                        <th>Packet Type</th>
+                        <th>Packet Content</th>
                         <th>Calories</th>
-                        <th>ExpiryDate</th>
-                        <th>QuantityinLitres</th>
+                        <th>Expiry Date</th>
+                        <th>
+                            Quantity in
+                            Litres
+                        </th>
                         <th>Action</th>
 
                     </tr>
@@ -54,7 +57,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Id)
+                                @Html.DisplayFor(modelItem => item.PacketId)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.PacketType)
@@ -64,13 +67,33 @@
                             </td>
 
                             <td>
-                                @Html.DisplayFor(modelItem => item.Calories)
+                                @if (item.Calories != 0)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Calories)
+
+                                }
+                                else
+                                {
+                                    var Cal = "-";
+                                    @Cal;
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ExpiryDate)
+                                @*@Html.DisplayFor(modelItem => item.ExpiryDate)*@
+                                @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.ExpiryDate))
+
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.LitersQty)
+                                @if (item.LitersQty != 0)
+                                {
+                                    @Html.DisplayFor(modelItem => item.LitersQty)
+
+                                }
+                                else
+                                {
+                                    var Ltr = "-";
+                                    @Ltr;
+                                }
                             </td>
                             <td>
                                 @*<button class="btn btn-success" id="EditBtn" onclick="EditRation(@item.Id)">Edit</button>*@

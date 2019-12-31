@@ -1,10 +1,10 @@
 ﻿@model WebUI.Models.RationScheduleViewModelNew
 
 @{
-    ViewBag.Title = "Schduled";
+    ViewBag.Title = "Scheduled";
 }
 <link href="~/Content/Site.css" rel="stylesheet" />
-<h2>Schduled</h2>
+<h2>Scheduled</h2>
 <header>
     <a href="/Ration/Dashboard">Back to Dashboard</a>
 
@@ -19,6 +19,7 @@
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+        <span id="ErrorDateStartMsg" style="color:red;"></span>
 
         <div id="FoodItem">
             <div class="form-group">
@@ -27,9 +28,6 @@
                     @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "StartingDate" } })
                     <br />
                     <input type="submit" value="Create" id="GetSchdule" class="btn btn-primary" />
-
-                    <span id="ErrorDateStartMsg" style="color:red;"></span>
-
                 </div>
             </div>
 
@@ -39,7 +37,7 @@
 
     if (Model.lstRationScheduleViewModel != null && Model.lstRationScheduleViewModel.Count > 0)
     {
-        <table class="table" table-bordered="">
+        <table class="table table-bordered dataTable no-footer">
             <caption></caption>
             <colgroup>
                 <col>
@@ -49,12 +47,15 @@
             <thead>
                 <tr>
                     <th scope="col"> Schedule Date</th>
-                    <th scope="col">PacketId </th>
+                    <th scope="col">Packet Id </th>
                     <th scope="col">Packet Type</th>
                     <th scope="col">Packet Content</th>
                     <th scope="col">Calories</th>
                     <th scope="col">Expiry Date</th>
-                    <th scope="col">QtyInLtrs</th>
+                    <th scope="col">
+                        Quantity in
+                        Litres
+                    </th>
                 </tr>
             </thead>
 
@@ -72,7 +73,7 @@
                                 isFrist = false;
                             }
 
-                            <th scope="row">@itemration.Id</th>
+                            <th scope="row">@itemration.PacketId</th>
                             <td>@itemration.PacketType</td>
                             <td>@itemration.PacketContent</td>
                             <td>
@@ -87,7 +88,10 @@
 
                                 }
                             </td>
-                            <td>@itemration.ExpiryDate</td>
+                            <td>
+                                @*@itemration.ExpiryDate*@
+                                @Convert.ToString(string.Format("{0:dd/MM/yyyy}", itemration.ExpiryDate))
+                            </td>
                             <td>
                                 @if (@itemration.LitersQty == 0)
                                 {
@@ -107,7 +111,8 @@
             }
 
         </table>
-        <p id="DisplayInventory">Number of days you can survive with current inventory : @Model.lstRationScheduleViewModel.OrderByDescending(a => a.LivedLife).FirstOrDefault().LivedLife<span id="LifeNumber"></span></p>
+        <br />
+        <p id="DisplayInventory" style="font-weight:bold">Number of days you can survive with current inventory : @Model.lstRationScheduleViewModel.OrderByDescending(a => a.LivedLife).FirstOrDefault().LivedLife<span id="LifeNumber"></span></p>
 
     }
 
@@ -118,31 +123,35 @@
 
     <script type="text/javascript">
 
+        
+        $("#GetSchdule").click(function () {
+            var StartDate = $("#StartingDate").val();
+            if (StartDate == "") {
+                $("#ErrorDateStartMsg").text("Please Select The Start Date");
+                return false;
+            }
+            sessionStorage.setItem("startdate", $('#StartingDate').val());
+            $("#StartingDate").val(sessionStorage.getItem("startdate"));
+        });
+
         $(document).ready(function () {
             $("#StartingDate").addClass("calender");
-           // $("#StartingDate").val("");
+            if (sessionStorage.getItem("startdate") == "" || sessionStorage.getItem("startdate") == null || sessionStorage.getItem("startdate") == undefined)
+                $("#StartingDate").val("");
+            else
+                $("#StartingDate").val(sessionStorage.getItem("startdate"));
 
             $("form").attr('autocomplete', 'off');
 
             $('#StartingDate').datepicker({
-                dateFormat: "dd/M/yy",
+                dateFormat: "dd-mm-yy",
                 changeMonth: true,
                 minDate: 0,
                 changeYear: true,
             });
 
-            $("#StartingDate").keypress(function (e) {
-                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-                    $("#StartDateError").html("Pick Date Only").show().fadeOut("slow");
-                    return false;
-                } else {
-                    $("#StartDateError").text("");
-                }
-            });
-
         });
 
-       
 
     </script>
 }

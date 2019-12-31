@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -39,7 +40,8 @@ namespace WebUI.Controllers
                     PacketContent = item.PacketContent != null ? item.PacketContent : "-",
                     Calories = item.Calories != null ? item.Calories : 0,
                     ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null,
-                    LitersQty = item.LitersQty != null ? item.LitersQty : 0
+                    LitersQty = item.LitersQty != null ? item.LitersQty : 0,
+                    PacketId=item.PacketTypeId=="1"? "F"+item.Id:"W"+item.Id              
                 });
                 //ViewBag.RecordList = data;
                 return View(data);
@@ -197,6 +199,10 @@ namespace WebUI.Controllers
             {
                 //DateTime StartDate
 
+                if (rationScheduleView.StartDate==DateTime.MinValue)
+                {
+
+                }
                 List<RationScheduleViewModel> rationScheduleViewModels = new List<RationScheduleViewModel>();
               
                 int NumberInventery = 0;
@@ -224,35 +230,37 @@ namespace WebUI.Controllers
                     packetDetail.Calories = item.Calories != null ? item.Calories : 0;
                     packetDetail.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
                     packetDetail.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
-
+                    packetDetail.PacketId = item.PacketTypeId == "1" ? "F" + item.Id : "W" + item.Id;
+                   
                     //This is for water packet type
                     if (item.PacketTypeId == "2")
                     {
-                        // List for store actucal records
+                        // List for store water actucal records
                         if (QtyForLiter < 2)
                         {
-
                             PacketsLst.Add(packetDetail);
                             Counter = Counter + 1;
                             QtyForLiter += Convert.ToInt32(item.LitersQty);
 
                         }
-                        // List for store temp records
+                        // List for store water temp records
                         else
                         {
-                            PacketDetail packetDetailTemp = new PacketDetail();
-                            packetDetailTemp.Id = item.Id;
-                            packetDetailTemp.PacketTypeId = item.PacketTypeId;
-                            packetDetailTemp.PacketType = _packetType.GetByID(PacketTypeId).PacketType;
-                            packetDetailTemp.PacketContent = item.PacketContent != null ? item.PacketContent : "-";
-                            packetDetailTemp.Calories = item.Calories != null ? item.Calories : 0;
-                            packetDetailTemp.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
-                            packetDetailTemp.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
+                            PacketDetail packetDetailLtrTemp = new PacketDetail();
+                            packetDetailLtrTemp.Id = item.Id;
+                            packetDetailLtrTemp.PacketTypeId = item.PacketTypeId;
+                            packetDetailLtrTemp.PacketType = _packetType.GetByID(PacketTypeId).PacketType;
+                            packetDetailLtrTemp.PacketContent = item.PacketContent != null ? item.PacketContent : "-";
+                            packetDetailLtrTemp.Calories = item.Calories != null ? item.Calories : 0;
+                            packetDetailLtrTemp.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
+                            packetDetailLtrTemp.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
+                            packetDetailLtrTemp.PacketId = item.PacketTypeId == "1" ? "F" + item.Id : "W" + item.Id;
+
                             if (item.LitersQty != null)
                             {
                                 CounterLtr = CounterLtr + 1;
                             }
-                            paketDetailsItems.Add(packetDetailTemp);
+                            paketDetailsItems.Add(packetDetailLtrTemp);
 
                         }
                     }
@@ -261,6 +269,7 @@ namespace WebUI.Controllers
                     //This is for food packet type
                     else if (item.PacketTypeId == "1")
                     {
+                        // List for store calories actucal records
                         if (Calories < 2500)
                         {
                             PacketsLst.Add(packetDetail);
@@ -268,22 +277,25 @@ namespace WebUI.Controllers
                             Calories += Convert.ToInt32(item.Calories);
 
                         }
+
+                        // List for store calories temp records
                         else
                         {
-                            int PacketTypeId1 = Convert.ToInt32(item.PacketTypeId);
-                            PacketDetail packetDetail1 = new PacketDetail();
-                            packetDetail1.Id = item.Id;
-                            packetDetail1.PacketTypeId = item.PacketTypeId;
-                            packetDetail1.PacketType = _packetType.GetByID(PacketTypeId1).PacketType;
-                            packetDetail1.PacketContent = item.PacketContent != null ? item.PacketContent : "-";
-                            packetDetail1.Calories = item.Calories != null ? item.Calories : 0;
+                            PacketDetail packetCalTempDetail = new PacketDetail();
+                            packetCalTempDetail.Id = item.Id;
+                            packetCalTempDetail.PacketTypeId = item.PacketTypeId;
+                            packetCalTempDetail.PacketType = _packetType.GetByID(PacketTypeId).PacketType;
+                            packetCalTempDetail.PacketContent = item.PacketContent != null ? item.PacketContent : "-";
+                            packetCalTempDetail.Calories = item.Calories != null ? item.Calories : 0;
                             if (item.Calories != null)
                             {
                                 CounterCalories = CounterCalories + 1;
                             }
-                            packetDetail1.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
-                            packetDetail1.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
-                            paketDetailsItems.Add(packetDetail1);
+                            packetCalTempDetail.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
+                            packetCalTempDetail.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
+                            packetCalTempDetail.PacketId = item.PacketTypeId == "1" ? "F" + item.Id : "W" + item.Id;
+
+                            paketDetailsItems.Add(packetCalTempDetail);
 
                         }
                     }
@@ -404,7 +416,8 @@ namespace WebUI.Controllers
             _errorlogs.Save();
             return View();
         }
-
+        
     }
+   
 
 }

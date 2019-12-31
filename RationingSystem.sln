@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{2F932A22-7AEE-41E7-9D95-A9A34C6A70D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ration.Contracts", "Contracts\Ration.Contracts.csproj", "{2F932A22-7AEE-41E7-9D95-A9A34C6A70D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{647BF1AC-5EE6-4691-8B65-38B423B3139D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ration.Model", "Model\Ration.Model.csproj", "{647BF1AC-5EE6-4691-8B65-38B423B3139D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{A7C387D7-1C85-4176-84FD-431ACB412FAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ration.Web", "WebUI\Ration.Web.csproj", "{A7C387D7-1C85-4176-84FD-431ACB412FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{0CE6DAA8-BC52-4EC4-AD3D-3E715083A721}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ration.DAL", "DAL\Ration.DAL.csproj", "{0CE6DAA8-BC52-4EC4-AD3D-3E715083A721}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RationUnitTest", "RationUnitTest\RationUnitTest.csproj", "{8A12AB6E-C663-49A5-97AF-60B66539FE58}"
 EndProject

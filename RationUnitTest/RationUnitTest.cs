@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Contracts;
 using DAL.Data;
@@ -64,6 +65,28 @@ namespace RationUnitTest
             // Assert
             Assert.IsNull(result);
         }
+
+
+        //******************Test Case to Add Water Ration Record(POST)******************//
+        [TestMethod]
+        public void RationControllerPostWaterAddRation()
+        {
+            PacketDetail packetDetail = new PacketDetail();
+            packetDetail.PacketContent = null;
+            packetDetail.PacketTypeId = "2";
+            packetDetail.ExpiryDate = null;
+            packetDetail.LitersQty = 2;
+            DataContext dataContext = new DataContext();
+            PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
+            PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
+            ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);
+
+            RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
+            ViewResult result = rationController.AddRation(packetDetail) as ViewResult;
+            // Assert
+            Assert.IsNull(result);
+        }
+
 
         //******************Test Case to Get Edit Ration View******************//
         [TestMethod]
@@ -153,9 +176,56 @@ namespace RationUnitTest
             RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
             ViewResult result = rationController.Schduled(rationScheduleViewModel) as ViewResult;
             // Assert
-            Assert.IsNull(result);
+            Assert.IsNotNull(result);
         }
 
-       
+        [TestMethod]
+        public void RationControllerNewPostSchudle()
+        {
+
+            //RationScheduleViewModel rationScheduleViewModel =new RationScheduleViewModel();
+            DataContext dataContext = new DataContext();
+            PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
+            PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
+            ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);
+
+
+            List<RationScheduleViewModelNew> rationDate = new List<RationScheduleViewModelNew>();
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                RationScheduleViewModelNew rationScheduleViewModel = new RationScheduleViewModelNew();
+
+                if (i==0)
+                {
+                    rationScheduleViewModel.StartDate = DateTime.Now;
+                    rationDate.Add(rationScheduleViewModel);
+
+                }
+                else
+                {
+                    rationScheduleViewModel.StartDate = DateTime.Now.AddDays(i);
+                    rationDate.Add(rationScheduleViewModel);
+
+                }
+            }
+            
+
+
+            foreach (var item in rationDate)
+            {
+                RationScheduleViewModelNew rationSchedule = new RationScheduleViewModelNew();
+                rationSchedule.StartDate = item.StartDate;
+                RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
+                ViewResult result = rationController.Schduled(rationSchedule) as ViewResult;
+                // Assert
+
+                Assert.IsNotNull(result);
+
+            }
+        }
+
+
     }
 }

@@ -86,21 +86,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contracts\Contracts.csproj">
+    <ProjectReference Include="..\Contracts\Ration.Contracts.csproj">
       <Project>{2f932a22-7aee-41e7-9d95-a9a34c6a70d8}</Project>
-      <Name>Contracts</Name>
+      <Name>Ration.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
+    <ProjectReference Include="..\DAL\Ration.DAL.csproj">
       <Project>{0ce6daa8-bc52-4ec4-ad3d-3e715083a721}</Project>
-      <Name>DAL</Name>
+      <Name>Ration.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\Ration.Model.csproj">
       <Project>{647bf1ac-5ee6-4691-8b65-38b423b3139d}</Project>
-      <Name>Model</Name>
+      <Name>Ration.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebUI\WebUI.csproj">
+    <ProjectReference Include="..\WebUI\Ration.Web.csproj">
       <Project>{A7C387D7-1C85-4176-84FD-431ACB412FAB}</Project>
-      <Name>WebUI</Name>
+      <Name>Ration.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

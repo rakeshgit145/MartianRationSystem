@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,12 @@ namespace Model
 
         public int? Calories { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? ExpiryDate { get; set; }
 
         public int? LitersQty { get; set; }
 
+        public string PacketId { get; set; }
         public bool? IsDeleted { get; set; }
 
     }
