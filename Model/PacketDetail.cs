@@ -26,6 +26,9 @@ namespace Model
 
         public string PacketId { get; set; }
         public bool? IsDeleted { get; set; }
-
+        public String Datestart
+        {
+            get; set;
+        }
     }
 }

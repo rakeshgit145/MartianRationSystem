@@ -45,8 +45,8 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.ExpiryDate, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.ExpiryDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.ExpiryDate, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Datestart, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Datestart, "", new { @class = "text-danger" })
                     <span id="ErrorMsg" style="color:red"></span>
 
                 </div>
@@ -80,10 +80,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#ExpiryDate").addClass("calender");
+            $("#Datestart").addClass("calender");
             $("form").attr('autocomplete', 'off');
             $("#PacketTypeId").val();
-            $('#ExpiryDate').datepicker({
+            $('#Datestart').datepicker({
                 dateFormat: "dd-mm-yy",
                 changeMonth: true,
                 changeYear: true,
@@ -139,7 +139,7 @@
                 var Counter = 0;
 
                 var PacketContentVal = $("#PacketContent").val();
-                var ExpiryDate = $("#ExpiryDate").val();
+                var ExpiryDate = $("#Datestart").val();
                 var Calories = $("#Calories").val();
                 var QtyLtrs = $("#LitersQty").val();
 
@@ -184,9 +184,9 @@
             $('#PacketContent').keyup(function () {
                 $("#ErrorPacketContentMsg").text("");
             });
-            
 
-            $("#LitersQty,#Calories,#ExpiryDate").keypress(function (e) {
+
+            $("#LitersQty,#Calories,#Datestart").keypress(function (e) {
                 if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
                     $("#errmsg").html("Digits Only").show().fadeOut("slow");
                     return false;

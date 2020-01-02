@@ -13,7 +13,7 @@ namespace RationUnitTest
 {
     [TestClass]
     public class RationUnitTest
-    {   
+    {
         //******************Test Case For Dashboard Initialization Method******************//
         [TestMethod]
         public void RationControllerDashboard()
@@ -22,8 +22,8 @@ namespace RationUnitTest
             DataContext dataContext = new DataContext();
             PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
             PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
-            ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);     
-            
+            ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);
+
             RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
             ViewResult result = rationController.Dashboard() as ViewResult;
             // Assert
@@ -46,15 +46,35 @@ namespace RationUnitTest
             Assert.IsNotNull(result);
         }
 
+        
         //******************Test Case to Add Ration Record(POST)******************//
         [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", @"|DataDirectory|\ScheduleXML\InsertRationPacket.xml", "InsertDataRation", DataAccessMethod.Sequential)]
+
         public void RationControllerPostAddRation()
         {
             PacketDetail packetDetail = new PacketDetail();
-            packetDetail.PacketContent = "Bread";
-            packetDetail.PacketTypeId = "1";
-            packetDetail.ExpiryDate = DateTime.Now;
-            packetDetail.Calories = 2500;
+
+
+            packetDetail.PacketContent = Convert.ToString(TestContext.DataRow["PacketContent"]);
+            packetDetail.PacketTypeId = Convert.ToString(TestContext.DataRow["PacketTypeId"]);
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "1")
+            {
+                packetDetail.Calories = Convert.ToInt32(TestContext.DataRow["Calories"]);
+
+            }
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "1")
+            {
+                packetDetail.Datestart = Convert.ToString(TestContext.DataRow["ExpiryDate"]);
+                //packetDetail.ExpiryDate = Convert.ToDateTime(packetDetail.Datestart);
+
+            }
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "2")
+            {
+                packetDetail.LitersQty = Convert.ToInt32(TestContext.DataRow["QuantityOfLtr"]);
+
+            }
+           
             DataContext dataContext = new DataContext();
             PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
             PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
@@ -65,28 +85,6 @@ namespace RationUnitTest
             // Assert
             Assert.IsNull(result);
         }
-
-
-        //******************Test Case to Add Water Ration Record(POST)******************//
-        [TestMethod]
-        public void RationControllerPostWaterAddRation()
-        {
-            PacketDetail packetDetail = new PacketDetail();
-            packetDetail.PacketContent = null;
-            packetDetail.PacketTypeId = "2";
-            packetDetail.ExpiryDate = null;
-            packetDetail.LitersQty = 2;
-            DataContext dataContext = new DataContext();
-            PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
-            PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
-            ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);
-
-            RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
-            ViewResult result = rationController.AddRation(packetDetail) as ViewResult;
-            // Assert
-            Assert.IsNull(result);
-        }
-
 
         //******************Test Case to Get Edit Ration View******************//
         [TestMethod]
@@ -104,17 +102,35 @@ namespace RationUnitTest
             Assert.IsNotNull(result);
         }
 
+       
         //******************Test Case to Update Ration Record(POST)******************//
         [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", @"|DataDirectory|\ScheduleXML\UpdateRationPacket.xml", "UpdateRation_Packet", DataAccessMethod.Sequential)]
+
         public void RationControllerPostEditRation()
         {
             PacketDetail packetDetail = new PacketDetail();
-            packetDetail.Id = 1;
-            packetDetail.PacketContent = null;
-            packetDetail.PacketTypeId = "2";
-            packetDetail.ExpiryDate = DateTime.Now;
-            packetDetail.Calories = 0;
-            packetDetail.LitersQty = 2;
+
+            packetDetail.Id = Convert.ToInt32(TestContext.DataRow["Id"]); 
+            packetDetail.PacketContent = Convert.ToString(TestContext.DataRow["PacketContent"]);
+            packetDetail.PacketTypeId = Convert.ToString(TestContext.DataRow["PacketTypeId"]);
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "1")
+            {
+                packetDetail.Calories = Convert.ToInt32(TestContext.DataRow["Calories"]);
+
+            }
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "1")
+            {
+                packetDetail.Datestart = Convert.ToString(TestContext.DataRow["ExpiryDate"]);
+                packetDetail.LitersQty = Convert.ToInt32(0);
+
+
+            }
+            if (Convert.ToString(TestContext.DataRow["PacketTypeId"]) == "2")
+            {
+                packetDetail.LitersQty = Convert.ToInt32(TestContext.DataRow["QuantityOfLtr"]);
+
+            }
 
             DataContext dataContext = new DataContext();
             PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
@@ -127,12 +143,13 @@ namespace RationUnitTest
             Assert.IsNull(result);
         }
 
-        //******************Test Case to Delete Ration Record(POST)******************//
+      
         [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", @"|DataDirectory|\ScheduleXML\DeleteRationPacket.xml", "DeleteRation_Packet", DataAccessMethod.Sequential)]
         public void RationControllerDeleteRation()
         {
             PacketDetail packetDetail = new PacketDetail();
-            packetDetail.Id = 1;
+            packetDetail.Id = Convert.ToInt32(TestContext.DataRow["PacketId"]); ;
             DataContext dataContext = new DataContext();
             PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
             PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
@@ -141,9 +158,8 @@ namespace RationUnitTest
             RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
             JsonResult result = rationController.DeleteRation(packetDetail) as JsonResult;
             // Assert
-            Assert.IsNotNull(result);            
+            Assert.IsNotNull(result);
         }
-
         //******************Test Case to Get Ration Schedule******************//
         [TestMethod]
         public void RationControllerGetSchudle()
@@ -176,56 +192,53 @@ namespace RationUnitTest
             RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
             ViewResult result = rationController.Schduled(rationScheduleViewModel) as ViewResult;
             // Assert
-            Assert.IsNotNull(result);
+            if (result != null)
+            {
+                Assert.IsNotNull(result);
+            }
+            else
+            {
+                Assert.IsNull(result);
+            }
+        }
+
+        
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get { return testContextInstance; }
+            set { testContextInstance = value; }
         }
 
         [TestMethod]
-        public void RationControllerNewPostSchudle()
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", @"|DataDirectory|\ScheduleXML\DateXml.xml", "Date_ScheduleDate", DataAccessMethod.Sequential)]
+        public void StartScheduleTestListMethod()
         {
-
-            //RationScheduleViewModel rationScheduleViewModel =new RationScheduleViewModel();
             DataContext dataContext = new DataContext();
             PacketDetailRepository packetDetailRepository = new PacketDetailRepository(dataContext);
             PacketTypeRepository packetTypeRepository = new PacketTypeRepository(dataContext);
             ErrorLogsRepository errorLogsRepository = new ErrorLogsRepository(dataContext);
 
 
-            List<RationScheduleViewModelNew> rationDate = new List<RationScheduleViewModelNew>();
+            string startScheduleDate = Convert.ToString(TestContext.DataRow["StartDate"]);
 
+            RationScheduleViewModelNew rationScheduleViewModelNew = new RationScheduleViewModelNew();
+            rationScheduleViewModelNew.statedate = startScheduleDate;
+            RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
 
-            for (int i = 0; i < 3; i++)
+            // Act
+            ViewResult result = rationController.Schduled(rationScheduleViewModelNew) as ViewResult;
+           // Assert
+            if (result != null)
             {
-                RationScheduleViewModelNew rationScheduleViewModel = new RationScheduleViewModelNew();
-
-                if (i==0)
-                {
-                    rationScheduleViewModel.StartDate = DateTime.Now;
-                    rationDate.Add(rationScheduleViewModel);
-
-                }
-                else
-                {
-                    rationScheduleViewModel.StartDate = DateTime.Now.AddDays(i);
-                    rationDate.Add(rationScheduleViewModel);
-
-                }
+                Assert.IsNotNull( result.Model);
             }
-            
+            else
 
-
-            foreach (var item in rationDate)
             {
-                RationScheduleViewModelNew rationSchedule = new RationScheduleViewModelNew();
-                rationSchedule.StartDate = item.StartDate;
-                RationController rationController = new RationController(packetDetailRepository, packetTypeRepository, errorLogsRepository);
-                ViewResult result = rationController.Schduled(rationSchedule) as ViewResult;
-                // Assert
-
-                Assert.IsNotNull(result);
-
+                Assert.IsNull(result);
             }
         }
-
 
     }
 }

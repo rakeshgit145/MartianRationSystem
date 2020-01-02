@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -41,9 +42,8 @@ namespace WebUI.Controllers
                     Calories = item.Calories != null ? item.Calories : 0,
                     ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null,
                     LitersQty = item.LitersQty != null ? item.LitersQty : 0,
-                    PacketId=item.PacketTypeId=="1"? "F"+item.Id:"W"+item.Id              
+                    PacketId = item.PacketTypeId == "1" ? "F" + item.Id : "W" + item.Id
                 });
-                //ViewBag.RecordList = data;
                 return View(data);
             }
 
@@ -77,7 +77,13 @@ namespace WebUI.Controllers
         {
             try
             {
+                IFormatProvider culture = new CultureInfo("en-US", true);
+                if (packetDetail.Datestart != null)
+                {
+                    packetDetail.Datestart = packetDetail.Datestart.Replace("/", "-");
 
+                    packetDetail.ExpiryDate = DateTime.ParseExact(packetDetail.Datestart, "dd-MM-yyyy", culture);
+                }
                 if (packetDetail.PacketTypeId == "1")
                 {
                     packetDetail.IsDeleted = false;
@@ -109,6 +115,11 @@ namespace WebUI.Controllers
             try
             {
                 var RationDetails = _packetDetail.GetByID(PacketId);
+                if (RationDetails.ExpiryDate!=null)
+                {
+                    RationDetails.Datestart = RationDetails.ExpiryDate.Value.ToString("dd/MM/yyyy");
+
+                }
                 return View(RationDetails);
             }
 
@@ -129,6 +140,9 @@ namespace WebUI.Controllers
             {
                 if (packetDetail.PacketTypeId == "1")
                 {
+                    IFormatProvider culture = new CultureInfo("en-US", true);
+                    packetDetail.Datestart = packetDetail.Datestart.Replace("/", "-");
+                    packetDetail.ExpiryDate = DateTime.ParseExact(packetDetail.Datestart, "dd-MM-yyyy", culture);
                     packetDetail.IsDeleted = false;
                     packetDetail.LitersQty = 0;
                     _packetDetail.Update(packetDetail);
@@ -199,25 +213,21 @@ namespace WebUI.Controllers
             {
                 //DateTime StartDate
 
-                if (rationScheduleView.StartDate==DateTime.MinValue)
-                {
-
-                }
                 List<RationScheduleViewModel> rationScheduleViewModels = new List<RationScheduleViewModel>();
-              
+                ParseDateTime(rationScheduleView);
                 int NumberInventery = 0;
-                var Schduledata = _packetDetail.GetAll().Where(x => x.IsDeleted == false && (x.ExpiryDate >= rationScheduleView.StartDate || x.ExpiryDate == null)).OrderBy(a => a.LitersQty).OrderBy(a => a.Calories).ToList();
+                var Schduledata = _packetDetail.GetAll().Where(x => x.IsDeleted == false && (EntityFunctions.TruncateTime(x.ExpiryDate) >= EntityFunctions.TruncateTime(rationScheduleView.StartDate) || x.ExpiryDate == null)).OrderBy(a => a.LitersQty).OrderBy(a => a.Calories).ToList();
                 List<PacketDetail> PacketsLst = new List<PacketDetail>(); List<PacketDetail> paketDetailsItems = new List<PacketDetail>();
                 int Calories = 0; int QtyForLiter = 0; var Counter = 0; var CounterLtr = 0; var CounterCalories = 0;
-                 int CalRequire = 0; int LtrQty = 0;
+                int CalRequire = 0; int LtrQty = 0;
 
-               
+
                 SchduleItem:
                 //foreach (var item in Schduledata)
                 int intCount = Schduledata.Count;
                 for (int i = 0; i < intCount; i++)
                 {
-                    var item = Schduledata.OrderBy(x=> Convert.ToInt32(2500 - (x.Calories + Calories))).OrderBy(x => Math.Abs(Convert.ToInt32( 2500 -(x.Calories + Calories))) )
+                    var item = Schduledata.OrderBy(x => Convert.ToInt32(2500 - (x.Calories + Calories))).OrderBy(x => Math.Abs(Convert.ToInt32(2500 - (x.Calories + Calories))))
                         .OrderBy(x => Convert.ToInt32(2 - (x.LitersQty + QtyForLiter))).OrderBy(x => Math.Abs(Convert.ToInt32(2 - (x.LitersQty + QtyForLiter))))
                         .FirstOrDefault();
 
@@ -231,7 +241,7 @@ namespace WebUI.Controllers
                     packetDetail.ExpiryDate = item.ExpiryDate != null ? item.ExpiryDate : null;
                     packetDetail.LitersQty = item.LitersQty != null ? item.LitersQty : 0;
                     packetDetail.PacketId = item.PacketTypeId == "1" ? "F" + item.Id : "W" + item.Id;
-                   
+
                     //This is for water packet type
                     if (item.PacketTypeId == "2")
                     {
@@ -305,10 +315,9 @@ namespace WebUI.Controllers
                     {
                         RationScheduleViewModel rationScheduleViewModel = new RationScheduleViewModel();
 
-                        //SchdulesTable += "<tbody><tr><th rowspan =" + Counter + " scope =rowgroup>" + rationScheduleView.StartDate + "</th>";
-                        if (rationScheduleView.StartDate!= null)
+                        if (rationScheduleView.StartDate != null)
                         {
-                            rationScheduleViewModel.StartDate = rationScheduleView.StartDate; 
+                            rationScheduleViewModel.StartDate = rationScheduleView.StartDate;
                         }
                         NumberInventery = NumberInventery + 1;
                         rationScheduleViewModel.LivedLife = NumberInventery;
@@ -326,6 +335,7 @@ namespace WebUI.Controllers
                     Schduledata.Remove(item);
                 }
 
+
                 // this is for If actual list contain some records but not fullfill our logic condition
                 if (PacketsLst.Count != 0)
                 {
@@ -340,7 +350,7 @@ namespace WebUI.Controllers
                     Schduledata = paketDetailsItems;
 
                 }
-            
+
 
                 Schduledata = Schduledata.OrderBy(a => a.LitersQty).OrderBy(a => a.Calories).ToList();
 
@@ -387,6 +397,20 @@ namespace WebUI.Controllers
             }
         }
 
+
+        private string AddDayInCurrentDate(string date, RationScheduleViewModelNew rationScheduleView)
+        {
+            string[] dateFormate = date.Split('-');
+            rationScheduleView.statedate = (Convert.ToInt32(dateFormate[0]) + 1).ToString() + "-" + dateFormate[1] + "-" + dateFormate[2].ToString();
+            var V = Convert.ToDateTime(dateFormate[2] + "-" + dateFormate[1] + "-" + (dateFormate[0].Length == 1 ? "0" : "" + (Convert.ToInt32(dateFormate[0])).ToString())).AddDays(1);
+            return V.ToString();
+        }
+        private void ParseDateTime(RationScheduleViewModelNew rationScheduleView)
+        {
+            string[] dtformat = rationScheduleView.statedate.Split('-');
+            rationScheduleView.StartDate = DateTime.Parse(dtformat[2] + "-" + dtformat[1] + "-" + (dtformat[0].Length == 1 ? "0" : "") + (Convert.ToInt32(dtformat[0])).ToString());
+        }
+
         //Method for handler an exception 
         public string getExDetails(Exception ex)
         {
@@ -416,8 +440,8 @@ namespace WebUI.Controllers
             _errorlogs.Save();
             return View();
         }
-        
+
     }
-   
+
 
 }

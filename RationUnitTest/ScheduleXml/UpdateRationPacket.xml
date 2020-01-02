@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<UpdateRation>
+  <UpdateRation_Packet>
+    <Id>24</Id>
+    <PacketTypeId>1</PacketTypeId>
+    <PacketContent>Biscuit Cold</PacketContent>
+    <ExpiryDate>24-10-2020</ExpiryDate>
+    <Calories>300</Calories>    
+    <QuantityOfLtr>null</QuantityOfLtr>
+  </UpdateRation_Packet>
+  <UpdateRation_Packet>
+    <Id>25</Id>
+    <PacketTypeId>1</PacketTypeId>
+    <PacketContent>Juice</PacketContent>
+    <ExpiryDate>02-10-2020</ExpiryDate>
+    <Calories>100</Calories>
+    <QuantityOfLtr>0</QuantityOfLtr>
+  </UpdateRation_Packet>
+  <UpdateRation_Packet>
+    <Id>33</Id>
+    <PacketTypeId>2</PacketTypeId>
+    <PacketContent></PacketContent>
+    <ExpiryDate></ExpiryDate>
+    <Calories></Calories>
+    <QuantityOfLtr>1</QuantityOfLtr>
+  </UpdateRation_Packet>
+  <UpdateRation_Packet>
+    <Id>27</Id>
+    <PacketTypeId>2</PacketTypeId>
+    <PacketContent></PacketContent>
+    <ExpiryDate></ExpiryDate>
+    <Calories></Calories>
+    <QuantityOfLtr>1</QuantityOfLtr>
+  </UpdateRation_Packet>
+</UpdateRation>

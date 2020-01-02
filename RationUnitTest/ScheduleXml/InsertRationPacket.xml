@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<InsertData>
+  <InsertDataRation>
+    <PacketTypeId>1</PacketTypeId>
+    <PacketContent>Hot Milk</PacketContent>
+    <ExpiryDate>02/10/2020</ExpiryDate>
+    <Calories>1500</Calories>
+    <QuantityOfLtr></QuantityOfLtr>
+  </InsertDataRation>
+  <InsertDataRation>
+    <PacketTypeId>1</PacketTypeId>
+    <PacketContent>Choclate Chiness</PacketContent>
+    <ExpiryDate>04/10/2020</ExpiryDate>
+    <Calories>200</Calories>
+    <QuantityOfLtr></QuantityOfLtr>
+  </InsertDataRation>
+  <InsertDataRation>
+    <PacketTypeId>2</PacketTypeId>
+    <PacketContent></PacketContent>
+    <ExpiryDate></ExpiryDate>
+    <Calories></Calories>
+    <QuantityOfLtr>2</QuantityOfLtr>
+  </InsertDataRation>
+  <InsertDataRation>
+    <PacketTypeId>2</PacketTypeId>
+    <PacketContent></PacketContent>
+    <ExpiryDate></ExpiryDate>
+    <Calories></Calories>
+    <QuantityOfLtr>3</QuantityOfLtr>
+  </InsertDataRation>
+</InsertData>
+

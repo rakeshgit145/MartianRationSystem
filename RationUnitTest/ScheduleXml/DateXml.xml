@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataSchedule>
+  <Date_ScheduleDate>
+    <StartDate>02-01-2020</StartDate>
+  </Date_ScheduleDate>
+  <Date_ScheduleDate>
+    <StartDate>03-01-2020</StartDate>
+  </Date_ScheduleDate>
+  <Date_ScheduleDate>
+    <StartDate>04-01-2020</StartDate>
+  </Date_ScheduleDate>
+  <Date_ScheduleDate>
+    <StartDate>05-01-2020</StartDate>
+  </Date_ScheduleDate>
+  <Date_ScheduleDate>
+    <StartDate>06-01-2020</StartDate>
+  </Date_ScheduleDate>
+</DataSchedule>

@@ -63,7 +63,6 @@ namespace DAL.Repositories
         /// <summary>
         /// Delete
         /// </summary>
-        /// <param name="poductID"></param>
         public virtual void Delete(TEntity entity)
         {
             //Deleting by passing entity
@@ -77,7 +76,6 @@ namespace DAL.Repositories
         /// <summary>
         /// Update 
         /// </summary>
-        /// <param name="product"></param>
         public virtual void Update(TEntity entity)
         {
             dbset.Attach(entity);

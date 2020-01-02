@@ -21,6 +21,7 @@ namespace WebUI.Models
     public class RationScheduleViewModelNew
     {
         
+        public string statedate { get; set; }
         public DateTime StartDate { get; set; }
         public List<RationScheduleViewModel> lstRationScheduleViewModel { get; set; }
 
